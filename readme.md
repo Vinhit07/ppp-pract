@@ -11,7 +11,8 @@ if _name_ == "_main_":
         processes.append(p)
         p.start()
     for p in processes:
-        p.join()```
+        p.join()
+```
 
 # Task 2: Squares using multiprocessing.Pool
 ```from multiprocessing import Pool
@@ -23,7 +24,8 @@ if _name_ == "_main_":
     with Pool(processes=4) as pool:
         numbers = list(range(1, 11))
         results = pool.map(square, numbers)
-        print("Squares:", results)```
+        print("Squares:", results)
+```
 
 # Task 3: Factorials using multiprocessing
 ```import math
@@ -35,7 +37,8 @@ if _name_ == "_main_":
     with Pool(processes=4) as pool:
         numbers = list(range(1, 11))
         results = pool.map(factorial, numbers)
-        print("Factorials:", results)```
+        print("Factorials:", results)
+```
 
 # Task 4: Compare serial vs multiprocessing for squares
 ```import time
@@ -51,7 +54,8 @@ start = time.time()
 with Pool() as pool:
     pool.map(square, range(1, 1001))
 end = time.time()
-print("Multiprocessing Time:", end - start)```
+print("Multiprocessing Time:", end - start)
+```
 
 # Task 5: Compute squares of 1000 numbers
 # Already done above; analyze speed via output timing.
@@ -78,13 +82,15 @@ for url in urls:
     threads.append(t)
 
 for t in threads:
-    t.join()```
+    t.join()
+```
 
 # Task 7: Use ThreadPoolExecutor for image downloading
 ```from concurrent.futures import ThreadPoolExecutor
 
 with ThreadPoolExecutor() as executor:
-    executor.map(download_image, urls)```
+    executor.map(download_image, urls)
+```
 
 # Task 8: Web scraper using multithreading
 ```from bs4 import BeautifulSoup
@@ -106,7 +112,8 @@ for url in web_urls:
     threads.append(t)
 
 for t in threads:
-    t.join()```
+    t.join()
+```
 
 # Task 9: Time comparison for file downloads
 ```import urllib.request
@@ -128,7 +135,8 @@ start = time.time()
 with ThreadPoolExecutor() as executor:
     executor.map(download_file, file_urls)
 end = time.time()
-print("Multithreaded Download Time:", end - start)```
+print("Multithreaded Download Time:", end - start)
+```
 
 # Task 10: Multithreaded file read/write
 ```files = ['file1.txt', 'file2.txt']
@@ -150,7 +158,8 @@ for fname in files:
     threads.extend([t1, t2])
 
 for t in threads:
-    t.join()```
+    t.join()
+```
 
 # Task 11: CPU-intensive work with multithreading (note: GIL limits performance)
 ```def cpu_task(n):
@@ -172,7 +181,8 @@ C = [[0]*100 for _ in range(100)]
 for i in range(100):
     for j in range(100):
         for k in range(100):
-            C[i][j] += A[i][k] * B[k][j]```
+            C[i][j] += A[i][k] * B[k][j]
+```
 
 # Task 13: Matrix mult using multiprocessing
 ```from multiprocessing import Pool
@@ -182,7 +192,8 @@ def matmul_row(i):
 
 if _name_ == "_main_":
     with Pool() as pool:
-        C = pool.map(matmul_row, range(100))```
+        C = pool.map(matmul_row, range(100))
+```
 
 # Task 14: Matrix multiplication using NumPy
 ```import numpy as np
@@ -191,7 +202,8 @@ A_np = np.array(A)
 B_np = np.array(B)
 start = time.time()
 C_np = np.dot(A_np, B_np)
-print("NumPy dot time:", time.time() - start)```
+print("NumPy dot time:", time.time() - start)
+```
 
 # Task 15: Test with 500x500 and 1000x1000 to compare
 # Change matrix sizes and rerun similar to above
@@ -209,4 +221,265 @@ with open("sample.txt", 'w') as f:
 
 bag = db.read_text("sample.txt").flat_map(str.split)
 word_counts = bag.frequencies().compute()
-print(word_counts)```
+print(word_counts)
+```
+# 18. Distributed Matrix Operation using Dask
+```
+import dask.array as da
+import numpy as np
+import time
+
+x = da.random.random((10000, 10000), chunks=(1000, 1000))
+y = da.random.random((10000, 10000), chunks=(1000, 1000))
+
+start = time.time()
+result = (x @ y).compute()
+print("Dask time:", time.time() - start)
+
+x_np = np.random.random((1000, 1000))
+y_np = np.random.random((1000, 1000))
+
+start = time.time()
+result_np = x_np @ y_np
+print("NumPy time:", time.time() - start)
+```
+
+# 19. PySpark Word Count
+```
+from pyspark import SparkContext
+sc = SparkContext("local", "WordCount")
+text_files = sc.textFile("/path/to/files/*.txt")
+counts = text_files.flatMap(lambda line: line.split(" ")).map(lambda word: (word, 1)).reduceByKey(lambda a, b: a + b)
+counts.saveAsTextFile("output")
+```
+
+# 20. Download images with threading
+```
+import threading, requests
+urls = ["https://example.com/image1.jpg", "https://example.com/image2.jpg"]
+def download_image(url):
+    response = requests.get(url)
+    with open(url.split("/")[-1], "wb") as f:
+        f.write(response.content)
+threads = [threading.Thread(target=download_image, args=(url,)) for url in urls]
+[t.start() for t in threads]
+[t.join() for t in threads]
+```
+
+# 21. Fetch multiple APIs concurrently
+```
+from concurrent.futures import ThreadPoolExecutor
+urls = ["https://api.github.com", "https://httpbin.org/get"]
+def fetch(url):
+    return requests.get(url).json()
+with ThreadPoolExecutor() as executor:
+    results = list(executor.map(fetch, urls))
+print(results)
+```
+
+# 22. Web scraper with multithreading
+```
+from bs4 import BeautifulSoup
+webpages = ["https://example.com/page1", "https://example.com/page2"]
+def scrape(url):
+    res = requests.get(url)
+    soup = BeautifulSoup(res.text, 'html.parser')
+    print(soup.title.string)
+threads = [threading.Thread(target=scrape, args=(url,)) for url in webpages]
+[t.start() for t in threads]
+[t.join() for t in threads]
+```
+
+# 23. Process large logs with multithreading
+```
+import os
+log_files = ["log1.txt", "log2.txt"]
+def process_log(file):
+    with open(file) as f:
+        for line in f:
+            if "ERROR" in line:
+                print(line.strip())
+threads = [threading.Thread(target=process_log, args=(log,)) for log in log_files]
+[t.start() for t in threads]
+[t.join() for t in threads]
+```
+
+# 24. Prime numbers with multithreading
+```
+import math
+nums = list(range(2, 100000))
+def is_prime(n):
+    if n < 2: return False
+    for i in range(2, int(math.sqrt(n)) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+def compute_primes():
+    for n in nums:
+        is_prime(n)
+threads = [threading.Thread(target=compute_primes) for _ in range(4)]
+[t.start() for t in threads]
+[t.join() for t in threads]
+# Note: CPU-bound task; GIL restricts threading scalability
+```
+
+# 25. Banking system simulation
+```
+import threading
+class Account:
+    def _init_(self, balance):
+        self.balance = balance
+        self.lock = threading.Lock()
+
+    def deposit(self, amount):
+        with self.lock:
+            self.balance += amount
+
+    def withdraw(self, amount):
+        with self.lock:
+            if self.balance >= amount:
+                self.balance -= amount
+
+account = Account(1000)
+def task():
+    for _ in range(100):
+        account.deposit(5)
+        account.withdraw(5)
+threads = [threading.Thread(target=task) for _ in range(10)]
+[t.start() for t in threads]
+[t.join() for t in threads]
+print("Final balance:", account.balance)
+```
+
+# 26. I/O-bound file reading
+```
+import os
+files = ["file1.txt", "file2.txt"]
+def read_file(file):
+    with open(file, 'r') as f:
+        print(f.read())
+threads = [threading.Thread(target=read_file, args=(file,)) for file in files]
+[t.start() for t in threads]
+[t.join() for t in threads]
+```
+
+# 27. Matrix multiplication manual vs NumPy
+```
+import numpy as np
+size = 100
+A = np.random.rand(size, size)
+B = np.random.rand(size, size)
+
+# NumPy
+start = time.time()
+C = A @ B
+print("NumPy time:", time.time() - start)
+
+# Manual
+C_manual = np.zeros((size, size))
+start = time.time()
+for i in range(size):
+    for j in range(size):
+        for k in range(size):
+            C_manual[i][j] += A[i][k] * B[k][j]
+print("Manual time:", time.time() - start)
+```
+
+# 28. Compare serial vs parallel
+```
+import multiprocessing as mp
+def matmul_worker(A, B, start_row, end_row):
+    C = np.zeros((end_row - start_row, B.shape[1]))
+    for i in range(start_row, end_row):
+        for j in range(B.shape[1]):
+            C[i - start_row][j] = sum(A[i, k] * B[k, j] for k in range(B.shape[0]))
+    return C
+
+def parallel_matmul(A, B):
+    num_procs = mp.cpu_count()
+    rows = A.shape[0]
+    step = rows // num_procs
+    pool = mp.Pool()
+    results = []
+    for i in range(num_procs):
+        start_row = i * step
+        end_row = (i + 1) * step if i != num_procs - 1 else rows
+        results.append(pool.apply_async(matmul_worker, (A, B, start_row, end_row)))
+    C_parts = [res.get() for res in results]
+    return np.vstack(C_parts)
+
+for n in [10, 100, 1000]:
+    A = np.random.rand(n, n)
+    B = np.random.rand(n, n)
+    start = time.time()
+    A @ B
+    print(f"{n}x{n} NumPy time:", time.time() - start)
+
+    start = time.time()
+    parallel_matmul(A, B)
+    print(f"{n}x{n} Parallel time:", time.time() - start)
+```
+
+# 29. GPU Parallelization using Numba
+```
+from numba import cuda
+@cuda.jit
+def add_kernel(a, b, out):
+    i = cuda.grid(1)
+    if i < a.size:
+        out[i] = a[i] + b[i]
+
+a = np.arange(1000000, dtype=np.float32)
+b = np.arange(1000000, dtype=np.float32)
+out = np.zeros_like(a)
+
+start = time.time()
+d_a = cuda.to_device(a)
+d_b = cuda.to_device(b)
+d_out = cuda.device_array_like(a)
+threadsperblock = 256
+blockspergrid = (a.size + (threadsperblock - 1)) // threadsperblock
+add_kernel[blockspergrid, threadsperblock](d_a, d_b, d_out)
+d_out.copy_to_host(out)
+print("GPU time:", time.time() - start)
+```
+
+# 30. Parallel Merge Sort using multiprocessing
+```
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+    return merge(left, right)
+
+def merge(left, right):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result.extend(left[i:])
+    result.extend(right[j:])
+    return result
+
+def parallel_merge_sort(arr):
+    if len(arr) <= 100000:
+        return merge_sort(arr)
+    else:
+        mid = len(arr) // 2
+        pool = mp.Pool(2)
+        left, right = pool.map(parallel_merge_sort, [arr[:mid], arr[mid:]])
+        return merge(left, right)
+
+arr = np.random.randint(0, 1000000, 500000)
+start = time.time()
+sorted_arr = parallel_merge_sort(arr.tolist())
+print("Parallel merge sort time:", time.time() - start)
+```
