@@ -1,5 +1,5 @@
 # Task 1: Squares using multiprocessing.Process
-from multiprocessing import Process
+```from multiprocessing import Process
 
 def compute_square(n):
     print(f"Square of {n} is {n * n}")
@@ -11,10 +11,10 @@ if _name_ == "_main_":
         processes.append(p)
         p.start()
     for p in processes:
-        p.join()
+        p.join()```
 
 # Task 2: Squares using multiprocessing.Pool
-from multiprocessing import Pool
+```from multiprocessing import Pool
 
 def square(n):
     return n * n
@@ -23,10 +23,10 @@ if _name_ == "_main_":
     with Pool(processes=4) as pool:
         numbers = list(range(1, 11))
         results = pool.map(square, numbers)
-        print("Squares:", results)
+        print("Squares:", results)```
 
 # Task 3: Factorials using multiprocessing
-import math
+```import math
 
 def factorial(n):
     return math.factorial(n)
@@ -35,10 +35,10 @@ if _name_ == "_main_":
     with Pool(processes=4) as pool:
         numbers = list(range(1, 11))
         results = pool.map(factorial, numbers)
-        print("Factorials:", results)
+        print("Factorials:", results)```
 
 # Task 4: Compare serial vs multiprocessing for squares
-import time
+```import time
 
 # Serial
 start = time.time()
@@ -51,13 +51,13 @@ start = time.time()
 with Pool() as pool:
     pool.map(square, range(1, 1001))
 end = time.time()
-print("Multiprocessing Time:", end - start)
+print("Multiprocessing Time:", end - start)```
 
 # Task 5: Compute squares of 1000 numbers
 # Already done above; analyze speed via output timing.
 
 # Task 6: Download images using threading
-import threading
+```import threading
 import requests
 
 urls = [
@@ -78,16 +78,16 @@ for url in urls:
     threads.append(t)
 
 for t in threads:
-    t.join()
+    t.join()```
 
 # Task 7: Use ThreadPoolExecutor for image downloading
-from concurrent.futures import ThreadPoolExecutor
+```from concurrent.futures import ThreadPoolExecutor
 
 with ThreadPoolExecutor() as executor:
-    executor.map(download_image, urls)
+    executor.map(download_image, urls)```
 
 # Task 8: Web scraper using multithreading
-from bs4 import BeautifulSoup
+```from bs4 import BeautifulSoup
 
 web_urls = [
     'https://example.com',
@@ -106,10 +106,10 @@ for url in web_urls:
     threads.append(t)
 
 for t in threads:
-    t.join()
+    t.join()```
 
 # Task 9: Time comparison for file downloads
-import urllib.request
+```import urllib.request
 
 file_urls = urls * 5
 
@@ -128,10 +128,10 @@ start = time.time()
 with ThreadPoolExecutor() as executor:
     executor.map(download_file, file_urls)
 end = time.time()
-print("Multithreaded Download Time:", end - start)
+print("Multithreaded Download Time:", end - start)```
 
 # Task 10: Multithreaded file read/write
-files = ['file1.txt', 'file2.txt']
+```files = ['file1.txt', 'file2.txt']
 
 def write_file(fname):
     with open(fname, 'w') as f:
@@ -150,10 +150,10 @@ for fname in files:
     threads.extend([t1, t2])
 
 for t in threads:
-    t.join()
+    t.join()```
 
 # Task 11: CPU-intensive work with multithreading (note: GIL limits performance)
-def cpu_task(n):
+```def cpu_task(n):
     count = 0
     for _ in range(10**6):
         count += n * n
@@ -172,26 +172,26 @@ C = [[0]*100 for _ in range(100)]
 for i in range(100):
     for j in range(100):
         for k in range(100):
-            C[i][j] += A[i][k] * B[k][j]
+            C[i][j] += A[i][k] * B[k][j]```
 
 # Task 13: Matrix mult using multiprocessing
-from multiprocessing import Pool
+```from multiprocessing import Pool
 
 def matmul_row(i):
     return [sum(A[i][k] * B[k][j] for k in range(100)) for j in range(100)]
 
 if _name_ == "_main_":
     with Pool() as pool:
-        C = pool.map(matmul_row, range(100))
+        C = pool.map(matmul_row, range(100))```
 
 # Task 14: Matrix multiplication using NumPy
-import numpy as np
+```import numpy as np
 
 A_np = np.array(A)
 B_np = np.array(B)
 start = time.time()
 C_np = np.dot(A_np, B_np)
-print("NumPy dot time:", time.time() - start)
+print("NumPy dot time:", time.time() - start)```
 
 # Task 15: Test with 500x500 and 1000x1000 to compare
 # Change matrix sizes and rerun similar to above
@@ -201,7 +201,7 @@ from multiprocessing import shared_memory
 # Requires advanced setup, left as implementation idea due to complexity
 
 # Task 17: Word count using Dask
-import dask.bag as db
+```import dask.bag as db
 
 # Save a large text file (or simulate)
 with open("sample.txt", 'w') as f:
@@ -209,4 +209,4 @@ with open("sample.txt", 'w') as f:
 
 bag = db.read_text("sample.txt").flat_map(str.split)
 word_counts = bag.frequencies().compute()
-print(word_counts)
+print(word_counts)```
